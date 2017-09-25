@@ -15,6 +15,15 @@ model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)
 test_data = datafile.iloc[:,:11].values
+test_class = datafile.iloc[:,11].values
 # print test_data
-y = model.predict(test_data)
-print y
+predicted_classes = model.predict(test_data)
+count = 0
+for i in range(len(predicted_classes)):
+    if predicted_classes[i] >= 0.5 and test_class[i]:
+        count += 1
+    elif predicted_classes[i] < 0.5 and not test_class[i]:
+        count += 1
+    
+print predicted_classes
+print float(count)/test_class.shape[0]
