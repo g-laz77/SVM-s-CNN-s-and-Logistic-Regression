@@ -16,5 +16,5 @@ model.fit(train_data,train_class)
 datafile = pd.read_csv(test_file,header=None)
 test_data = datafile.iloc[:,:11].values
 # print test_data
-y = model.predict(test_data)
-print y
+predicted_classes = model.predict(test_data)
+print predicted_classes

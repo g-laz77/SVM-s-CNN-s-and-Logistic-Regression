@@ -1,5 +1,5 @@
 import sys
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import LinearRegression, LogisticRegression
 import pandas as pd
 
 train_file = sys.argv[1]
@@ -10,11 +10,11 @@ train_data = datafile.iloc[:,:11].values
 train_class = datafile.iloc[:,11].values
 # print train_data, train_class
 
-model = Ridge(alpha=0.1, normalize=True, max_iter=1e5)
+model = LinearRegression( normalize=True)
 model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)
 test_data = datafile.iloc[:,:11].values
 # print test_data
-predicted_classes = model.predict(test_data)
-print predicted_classes
+y = model.predict(test_data)
+print y
