@@ -10,7 +10,7 @@ train_data = datafile.iloc[:,:11].values
 train_class = datafile.iloc[:,11].values
 # print train_data, train_class
 
-model = Lasso(alpha=0.01, normalize=True, max_iter=1e5)
+model = Lasso(alpha=0.01, normalize=False, max_iter=1e5)
 model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)

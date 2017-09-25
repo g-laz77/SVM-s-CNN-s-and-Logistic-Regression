@@ -10,7 +10,7 @@ train_data = datafile.iloc[:,:11].values
 train_class = datafile.iloc[:,11].values
 # print train_data, train_class
 
-model = ElasticNet(alpha=0.1, normalize=True, max_iter=1e5)
+model = ElasticNet(alpha=0.1, normalize=False, max_iter=1e5)
 model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)
