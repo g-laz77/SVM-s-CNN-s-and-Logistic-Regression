@@ -48,18 +48,19 @@ def cnn(X_train,Y_train):
     # model.evaluate(X_test, Y_test, verbose=1)  
 
 if "__name__" != "__main__":
-    a = unpickle("data_batch_1")
-    train_data = a["data"] 
-    train_labels = a["labels"] 
-    b = unpickle("batches.meta")
-    label_names = b["label_names"]
-    #reshaping the training data and their classes
-    train_data = np.reshape(train_data,(train_data.shape[0], 3, 32, 32))
-    train_labels = np_utils.to_categorical(train_labels, 10)
+    for i in range(5):
+        a = unpickle("data_batch_"+i)
+        train_data = a["data"] 
+        train_labels = a["labels"] 
+        b = unpickle("batches.meta")
+        label_names = b["label_names"]
+        #reshaping the training data and their classes
+        train_data = np.reshape(train_data,(train_data.shape[0], 3, 32, 32))
+        train_labels = np_utils.to_categorical(train_labels, 10)
 
-    train_data = train_data.astype('float32')
-    train_data /= np.max(train_data)
-    # print train_data[0].shape
-    # print train_labels.shape
-    # print label_names
-    cnn(train_data,train_labels)
+        train_data = train_data.astype('float32')
+        train_data /= np.max(train_data)
+        # print train_data[0].shape
+        # print train_labels.shape
+        # print label_names
+        cnn(train_data,train_labels)
