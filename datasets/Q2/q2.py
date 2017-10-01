@@ -8,7 +8,7 @@ import cPickle
 import tensorflow as tf
 # fix random seed for reproducibility
 batch_size = 32 
-num_epochs = 200 
+num_epochs = 20 
 kernel_size = 3 
 pool_size = 2 
 conv_depth_1 = 32 
@@ -48,19 +48,21 @@ def cnn(X_train,Y_train):
     # model.evaluate(X_test, Y_test, verbose=1)  
 
 if "__name__" != "__main__":
-    for i in range(5):
-        a = unpickle("data_batch_"+i)
-        train_data = a["data"] 
-        train_labels = a["labels"] 
-        b = unpickle("batches.meta")
-        label_names = b["label_names"]
-        #reshaping the training data and their classes
-        train_data = np.reshape(train_data,(train_data.shape[0], 3, 32, 32))
-        train_labels = np_utils.to_categorical(train_labels, 10)
+    train_data = unpickle("data_batch_1")["data"]
+    train_labels = unpickle("data_batch_1")["labels"]
+    for i in range(2,6):
+        a = unpickle("data_batch_"+str(i))
+        train_data = np.append(train_data,a["data"],axis=0)
+        train_labels += a["labels"]
+    b = unpickle("batches.meta")
+    label_names = b["label_names"]
+    #reshaping the training data and their classes
+    train_data = np.reshape(train_data,(train_data.shape[0], 3, 32, 32))
+    train_labels = np_utils.to_categorical(train_labels, 10)
 
-        train_data = train_data.astype('float32')
-        train_data /= np.max(train_data)
-        # print train_data[0].shape
-        # print train_labels.shape
-        # print label_names
-        cnn(train_data,train_labels)
+    train_data = train_data.astype('float32')
+    train_data /= np.max(train_data)
+    print train_data.shape
+    print train_labels.shape
+    print label_names
+    cnn(train_data,train_labels)
