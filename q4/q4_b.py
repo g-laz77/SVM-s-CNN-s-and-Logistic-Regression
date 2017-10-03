@@ -20,10 +20,12 @@ test_class = datafile.iloc[:,11].values
 predicted_classes = model.predict(test_data)
 count = 0
 for i in range(len(predicted_classes)):
-    if predicted_classes[i] >= 0.5 and test_class[i]:
-        count += 1
-    elif predicted_classes[i] < 0.5 and not test_class[i]:
-        count += 1
+    if predicted_classes[i] >= 0.5 :
+        predicted_classes[i] = 1
+    elif predicted_classes[i] < 0.5 :
+        predicted_classes[i] = 0
     
 print predicted_classes
-print float(count)/test_class.shape[0]
+# print float(count)/test_class.shape[0]
+score = accuracy_score(test_class, predicted_classes)
+print(score)
