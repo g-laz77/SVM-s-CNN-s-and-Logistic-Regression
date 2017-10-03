@@ -147,7 +147,7 @@ def perceptron(X, Y):
     """
 
     # YOUR CODE GOES HERE
-    model = Perceptron(n_iter=100)
+    model = Perceptron(n_iter=100,eta0=0.01,random_state=0,verbose=0)
     model.fit(kernelX,Y)
     train_predictions = model.predict(kernelX)
     train_labels = np.asarray(Y)

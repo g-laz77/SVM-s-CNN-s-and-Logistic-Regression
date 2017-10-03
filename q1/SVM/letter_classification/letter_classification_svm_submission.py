@@ -122,7 +122,7 @@ def SVM(train_data,
         train_labels,
         test_data,
         test_labels,
-        kernel='linear'):
+        kernel='rbf'):
     """
     Function to create, train and test the one-vs-all SVM using scikit-learn.
 
@@ -153,7 +153,7 @@ def SVM(train_data,
     """
 
     # YOUR CODE GOES HERE
-    model = svm.SVC(C=1.0,decision_function_shape='ovr',kernel=kernel)
+    model = svm.SVC(C=100,kernel=kernel,gamma=0.1)
     model.fit(train_data,train_labels)
     train_predictions = model.predict(train_data)
     # print train_predictions
@@ -211,7 +211,7 @@ if __name__ == '__main__':
             sys.exit()
 
     # Set the value for svm_kernel as required.
-    svm_kernel = 'linear'
+    svm_kernel = 'rbf'
 
     """
     Get the input data using the provided function. Store the X and Y returned
@@ -251,7 +251,18 @@ if __name__ == '__main__':
     """
 
     # YOUR CODE GOES HERE
-    print accumulated_metrics
+    temp1 = temp2 = temp3 = temp4 = 0.0
+    for i in range(len(accumulated_metrics)):
+        temp1 += accumulated_metrics[i][0]/5
+        temp2 += accumulated_metrics[i][1]/5
+        temp3 += accumulated_metrics[i][2]/5
+        temp4 += accumulated_metrics[i][3]/5
+        
+    print("Accuracy:",temp1)
+    print("Precision:",temp2)
+    print("Recall:",temp3)
+    print("F1:",temp4)
+    
 
     """
     ==========================================================================

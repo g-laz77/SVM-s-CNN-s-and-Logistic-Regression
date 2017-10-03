@@ -1,7 +1,7 @@
 import matplotlib
 import numpy as np
 import PIL.Image
-# import IPython.display
+import IPython.display
 
 from numpy import genfromtxt
 from cStringIO import StringIO
@@ -27,16 +27,16 @@ X_test = preprocessing.scale(X_test)
 y_test = genfromtxt('notMNIST_test_labels.csv', delimiter=',')
 
 # is C the inverse of regularization parameter?
-clf = LogisticRegression(penalty='l2', C=0.01)
+clf = LogisticRegression(penalty='l1', C=0.01)
 clf.fit(X_train, y_train)
 
 score = clf.score(X_test, y_test)
 print score
 
-"""
+
 n = randint(1, 1000)
 label = y_test[n]
 im = X_test[n, :].reshape((28, 28))
 print(label)
 showarray(im)
-"""
+
