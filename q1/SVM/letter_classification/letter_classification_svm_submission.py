@@ -166,7 +166,7 @@ def SVM(train_data,
     respective variable names.
     """
     train_accuracy = calculate_accuracy(train_predictions, train_labels)
-    print "Training Accuracy: %.4f" % (train_accuracy)
+    # print "Training Accuracy: %.4f" % (train_accuracy)
 
     """
     Use the trained model to perform testing. Using the output of the testing
@@ -182,7 +182,7 @@ def SVM(train_data,
     test_predictions = model.predict(test_data)
     # print test_predictions
     test_accuracy = calculate_accuracy(test_predictions, test_labels)
-    print "Testing Accuracy: %.4f" % (test_accuracy)
+    # print "Testing Accuracy: %.4f" % (test_accuracy)
 
     precision, recall, f1 = calculate_metrics(test_predictions, test_labels)
     """
@@ -205,7 +205,8 @@ if __name__ == '__main__':
         filename = os.path.join(args.data_dir, 'letter_classification_train.data')
         try:
             if os.path.exists(filename):
-                print "Using %s as the dataset file" % filename
+                k = 1
+                # print "Using %s as the dataset file" % filename
         except:
             print "%s not present in %s. Please enter the correct dataset directory" % (filename, args.data_dir)
             sys.exit()
@@ -236,8 +237,8 @@ if __name__ == '__main__':
     accumulated_metrics = []
     fold = 1
     for train_indices, test_indices in sss.split(X_data, Y_data):
-        print "Fold%d -> Number of training samples: %d | Number of testing "\
-            "samples: %d" % (fold, len(train_indices), len(test_indices))
+        # print "Fold%d -> Number of training samples: %d | Number of testing "\
+            # "samples: %d" % (fold, len(train_indices), len(test_indices))
         train_data, test_data = X_data[train_indices], X_data[test_indices]
         train_labels, test_labels = Y_data[train_indices], Y_data[test_indices]
         accumulated_metrics.append(
@@ -251,6 +252,7 @@ if __name__ == '__main__':
     """
 
     # YOUR CODE GOES HERE
+    # print accumulated_metrics
     temp1 = temp2 = temp3 = temp4 = 0.0
     for i in range(len(accumulated_metrics)):
         temp1 += accumulated_metrics[i][0]/5
@@ -258,10 +260,7 @@ if __name__ == '__main__':
         temp3 += accumulated_metrics[i][2]/5
         temp4 += accumulated_metrics[i][3]/5
         
-    print("Accuracy:",temp1)
-    print("Precision:",temp2)
-    print("Recall:",temp3)
-    print("F1:",temp4)
+    print temp1, temp2, temp3, temp4
     
 
     """

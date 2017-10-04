@@ -1,5 +1,6 @@
 import sys
-from sklearn.linear_model import ElasticNet
+from sklearn.linear_model import ElasticNet,SGDClassifier
+from sklearn.metrics import accuracy_score
 import pandas as pd
 
 train_file = sys.argv[1]
@@ -10,7 +11,7 @@ train_data = datafile.iloc[:,:11].values
 train_class = datafile.iloc[:,11].values
 # print train_data, train_class
 
-model = ElasticNet(alpha=0.1, normalize=False, max_iter=1e5)
+model = ElasticNet(alpha=0.001, l1_ratio=0.1)
 model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)
@@ -25,7 +26,8 @@ for i in range(len(predicted_classes)):
     elif predicted_classes[i] < 0.5 :
         predicted_classes[i] = 0
     
-print predicted_classes
+for i in range(len(predicted_classes)):
+    print (predicted_classes[i])
 # print float(count)/test_class.shape[0]
 score = accuracy_score(test_class, predicted_classes)
 print(score)

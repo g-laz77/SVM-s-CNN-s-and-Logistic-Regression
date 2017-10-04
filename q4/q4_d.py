@@ -1,5 +1,7 @@
 import sys
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.metrics import accuracy_score
+
 import pandas as pd
 
 train_file = sys.argv[1]
@@ -10,7 +12,7 @@ train_data = datafile.iloc[:,:11].values
 train_class = datafile.iloc[:,11].values
 # print train_data, train_class
 
-model = LinearRegression( normalize=True)
+model = LogisticRegression(C=1000000000,solver='newton-cg')
 model.fit(train_data,train_class)
 
 datafile = pd.read_csv(test_file,header=None)
@@ -25,7 +27,7 @@ for i in range(len(predicted_classes)):
     elif predicted_classes[i] < 0.5 :
         predicted_classes[i] = 0
     
-print predicted_classes
-# print float(count)/test_class.shape[0]
+for i in range(len(predicted_classes)):
+    print (predicted_classes[i])# print float(count)/test_class.shape[0]
 score = accuracy_score(test_class, predicted_classes)
 print(score)

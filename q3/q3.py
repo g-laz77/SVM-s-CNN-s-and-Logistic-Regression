@@ -4,7 +4,7 @@ import PIL.Image
 import IPython.display
 
 from numpy import genfromtxt
-from cStringIO import StringIO
+from io import StringIO
 from random import randint
 from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
@@ -14,7 +14,8 @@ def showarray(a, fmt='png'):
     a = np.uint8(a)
     f = StringIO()
     PIL.Image.fromarray(a).save(f, fmt)
-    IPython.display.display(IPython.display.Image(data=f.getvalue()))
+    filen = open("img.png","w+")
+    filen.write(IPython.display.display(IPython.display.Image(data=f.getvalue())))
 
 
 X_train = genfromtxt('notMNIST_train_data.csv', delimiter=',')
