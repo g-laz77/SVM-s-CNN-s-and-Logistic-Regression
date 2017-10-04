@@ -29,16 +29,17 @@ def showarray(a, fmt='png'):
     filen = open("img.png","w+")
     filen.write(IPython.display.display(IPython.display.Image(data=f.getvalue())))
 
-file1 = sys.argv[1]
-file2 = sys.argv[2]
-file3 = sys.argv[3]
-file4 = sys.argv[4]
-X_train = np.array(pd.read_csv(file1,header=None))
+direct = sys.argv[1]
+file1 = "notMNIST_train_data.csv"
+file2 = "notMNIST_train_labels.csv"
+file3 = "notMNIST_test_data.csv"
+file4 = "notMNIST_test_labels.csv"
+X_train = np.array(pd.read_csv(direct+file1,header=None))
 
-y_train = np.array(pd.read_csv(file2,header=None))
-X_test = np.array(pd.read_csv(file3,header=None))
+y_train = np.array(pd.read_csv(direct+file2,header=None))
+X_test = np.array(pd.read_csv(direct+file3,header=None))
 
-y_test = np.array(pd.read_csv(file4,header=None))
+y_test = np.array(pd.read_csv(direct+file4,header=None))
 pp.StandardScaler().fit(X_train)
 pp.StandardScaler().fit(X_test)
 
@@ -65,9 +66,9 @@ plt.imshow(im)
 plt.show()
 
 
-n = randint(1, 1000)
-label = y_test[n]
-im = X_test[n, :].reshape((28, 28))
-print(label)
-showarray(im)
+# n = randint(1, 1000)
+# label = y_test[n]
+# im = X_test[n, :].reshape((28, 28))
+# print(label)
+# showarray(im)
 
