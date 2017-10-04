@@ -7,6 +7,7 @@ import numpy as np
 import cPickle
 import tensorflow as tf
 import keras
+import sys,os
 # fix random seed for reproducibility
 batch_size = 32 
 num_epochs = 50 
@@ -22,33 +23,35 @@ def unpickle(file):
     with open(file, 'rb') as fo:
         dict = cPickle.load(fo)
     return dict
-def cnn(X_train,Y_train):
+
+
+def cnn(X_train,Y_train,activation):
         model = Sequential()
-        model.add(Conv2D(32, (3, 3), padding='same',
+        model.add(Conv2D(conv_depth_1, (3, 3), padding='same',
                          input_shape=X_train.shape[1:]))
         model.add(BatchNormalization())
-        model.add(Activation('relu'))
-        model.add(Conv2D(32, (3, 3),padding='same'))
+        model.add(Activation(activation))
+        model.add(Conv2D(conv_depth_1, (3, 3),padding='same'))
         model.add(BatchNormalization())
-        model.add(Activation('relu'))
+        model.add(Activation(activation))
         model.add(MaxPooling2D(pool_size=(2, 2),dim_ordering='th'))
-        model.add(Dropout(0.25))
+        model.add(Dropout(drop_prob_1))
 
-        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Conv2D(conv_depth_2, (3, 3), padding='same'))
         model.add(BatchNormalization())
-        model.add(Activation('relu'))
-        model.add(Conv2D(64, (3, 3),padding='same'))
+        model.add(Activation(activation))
+        model.add(Conv2D(conv_depth_2, (3, 3),padding='same'))
         model.add(BatchNormalization())
-        model.add(Activation('relu'))
+        model.add(Activation(activation))
         model.add(MaxPooling2D(pool_size=(2, 2),dim_ordering='th'))
-        model.add(Dropout(0.25))
+        model.add(Dropout(drop_prob_1))
 
         model.add(Flatten())
-        model.add(Dense(512))
+        model.add(Dense(hidden_size))
         model.add(BatchNormalization())
-        model.add(Activation('relu'))
-        model.add(Dropout(0.5))
-        model.add(Dense(10))
+        model.add(Activation(activation))
+        model.add(Dropout(drop_prob_2))
+        model.add(Dense(10))        #num_classes=10
         model.add(BatchNormalization())
         model.add(Activation('softmax'))
         optimizer = keras.optimizers.rmsprop(lr=0.0001,decay=1e-6)
@@ -85,21 +88,29 @@ def cnn(X_train,Y_train):
     # model.evaluate(X_test, Y_test, verbose=1)  
 
 if "__name__" != "__main__":
-    train_data = unpickle("data_batch_1")["data"]
-    train_labels = unpickle("data_batch_1")["labels"]
-    for i in range(2,6):
-        a = unpickle("data_batch_"+str(i))
-        train_data = np.append(train_data,a["data"],axis=0)
-        train_labels += a["labels"]
-    b = unpickle("batches.meta")
-    label_names = b["label_names"]
+    train_dir = sys.argv[1]
+    # test_file = sys.argv[2]
+    train_data = np.zeros([0,0])
+    train_labels = np.zeros([0,0])
+    flag = 0
+    for filename in os.listdir(train_dir):
+        print train_dir+filename
+        a = unpickle(train_dir+filename)
+        if not flag:
+            train_data = a["data"]
+            train_labels = a["labels"]
+            flag = 1
+        else:
+            train_data = np.concatenate((train_data,a["data"]),axis=0)
+            train_labels = np.concatenate((train_labels,a["labels"]),axis=0)
+            
     #reshaping the training data and their classes
     train_data = np.reshape(train_data,(train_data.shape[0], 3, 32, 32))
     train_labels = np_utils.to_categorical(train_labels, 10)
 
     train_data = train_data.astype('float32')
-    train_data /= np.max(train_data)
+    train_data /= 255
     print train_data.shape
     print train_labels.shape
-    print label_names
-    cnn(train_data,train_labels)
+    # print label_names
+    cnn(train_data,train_labels,'relu')

@@ -1,14 +1,26 @@
-import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import PIL.Image
 import IPython.display
-
+import pandas as pd
+import sys
 from numpy import genfromtxt
 from io import StringIO
 from random import randint
-from sklearn import preprocessing
+from sklearn import preprocessing as pp
+
 from sklearn.linear_model import LogisticRegression
 
+def accuracy(final_ans,test_res):
+	co=0
+	i=0
+	for i in xrange(len(final_ans)):
+		if final_ans[i]==0 and test_res[i]==0:
+			co+=1
+		elif final_ans[i]==1 and test_res[i]==1:
+			co+=1
+		i+=1
+	return (1.0*co)/i
 
 def showarray(a, fmt='png'):
     a = np.uint8(a)
@@ -17,22 +29,40 @@ def showarray(a, fmt='png'):
     filen = open("img.png","w+")
     filen.write(IPython.display.display(IPython.display.Image(data=f.getvalue())))
 
+file1 = sys.argv[1]
+file2 = sys.argv[2]
+file3 = sys.argv[3]
+file4 = sys.argv[4]
+X_train = np.array(pd.read_csv(file1,header=None))
 
-X_train = genfromtxt('notMNIST_train_data.csv', delimiter=',')
-X_train = preprocessing.scale(X_train)
-# X_train = preprocessing.normalize(X_train, norm='l2')
-y_train = genfromtxt('notMNIST_train_labels.csv', delimiter=',')
-X_test = genfromtxt('notMNIST_test_data.csv', delimiter=',')
-X_test = preprocessing.scale(X_test)
-# X_test = preprocessing.normalize(X_test, norm='l2')
-y_test = genfromtxt('notMNIST_test_labels.csv', delimiter=',')
+y_train = np.array(pd.read_csv(file2,header=None))
+X_test = np.array(pd.read_csv(file3,header=None))
+
+y_test = np.array(pd.read_csv(file4,header=None))
+pp.StandardScaler().fit(X_train)
+pp.StandardScaler().fit(X_test)
 
 # is C the inverse of regularization parameter?
-clf = LogisticRegression(penalty='l1', C=0.01)
+clf = LogisticRegression(penalty='l2', C=1000)
 clf.fit(X_train, y_train)
 
-score = clf.score(X_test, y_test)
-print score
+test_ans = clf.predict(X_test)
+
+final_ans = np.zeros(np.size(test_ans))
+
+for i in xrange(len(test_ans)):
+    if test_ans[i] >= 0.5:
+        final_ans[i] = 1
+
+accuracy = accuracy(final_ans,y_test)
+
+print accuracy
+
+weights = clf.coef_
+
+im = weights.reshape((28, 28))
+plt.imshow(im)
+plt.show()
 
 
 n = randint(1, 1000)
